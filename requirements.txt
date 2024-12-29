@@ -1,0 +1,10 @@
+Microsoft.entityframeworkcore.mysql
+Microsoft.entityframeworkcore.tools
+Microsoft.entityframeworkcore.design
+
+Microsoft.extensions.entity.core
+Microsoft.aspnetcore.identity.entityframeworkcore
+Microsoft.aspnetcore.authentication.jwtbearer
+Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+connection string in appsetings.json

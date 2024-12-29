@@ -1,0 +1,6 @@
+@DrinkConnect_HostAddress = http://localhost:5037
+
+GET {{DrinkConnect_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
