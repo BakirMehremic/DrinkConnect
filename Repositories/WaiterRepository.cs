@@ -50,10 +50,10 @@ namespace DrinkConnect.Repositories
             return order;
         }
 
-        public async Task<Order?> EditOrderAsync(Order order)
+        public async Task<Order?> EditOrderAsync(int id, Order order)
         {
             var oldOrder = await _context.Orders.
-            FirstOrDefaultAsync(x => x.Id == order.Id);
+            FirstOrDefaultAsync(x => x.Id == id);
 
             if(oldOrder is null) return null;
 

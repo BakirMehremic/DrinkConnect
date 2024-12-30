@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using DrinkConnect.Enums;
 
 namespace DrinkConnect.Dtos
 {
@@ -13,13 +14,16 @@ namespace DrinkConnect.Dtos
         public int Quantity { get; set; }
 
         [Required]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
 
         [Required]
         public string? Description { get; set; }
 
         [Required]
-        public float? Price { get; set; }
+        public float Price { get; set; }
+
+        [Required]
+        public ProductCategory Category {get; set;}
 
     }
 }

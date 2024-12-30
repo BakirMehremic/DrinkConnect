@@ -15,7 +15,7 @@ namespace DrinkConnect.Interfaces.RepositoryInterfaces
 
         Task<Order> AddOrderAsync(Order order);
 
-        Task<Order?> EditOrderAsync(Order order);
+        Task<Order?> EditOrderAsync(int id, Order order);
 
         Task<Order?> DeleteOrderAsync(int id);
 

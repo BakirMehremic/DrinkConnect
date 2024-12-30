@@ -16,7 +16,7 @@ namespace DrinkConnect.Interfaces.ServiceInterfaces
 
         Task<Order> AddOrderAsync(NewOrderDto newOrderDto);
 
-        Task<Order?> EditOrderAsync(EditOrderDto editOrderDto);
+        Task<Order?> EditOrderAsync(int id, EditOrderDto editOrderDto);
 
         Task<Order?> DeleteOrderAsync(int id);
 

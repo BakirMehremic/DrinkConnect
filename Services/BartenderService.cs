@@ -6,6 +6,7 @@ using DrinkConnect.Dtos;
 using DrinkConnect.Enums;
 using DrinkConnect.Interfaces.RepositoryInterfaces;
 using DrinkConnect.Interfaces.ServiceInterfaces;
+using DrinkConnect.Mappers;
 using DrinkConnect.Models;
 
 namespace DrinkConnect.Services
@@ -22,52 +23,59 @@ namespace DrinkConnect.Services
 
         public async Task<Product> AddProductAsync(NewProductDto newProductDto)
         {
-            throw new NotImplementedException();
+            var product = newProductDto.ToProductFromNewProductDto();
+            return await _repository.AddProductAsync(product);
         }
 
-        public Task<Notification?> DeleteNotificationAsync(int id)
+        public async Task<Notification?> DeleteNotificationAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.DeleteNotificationAsync(id);
         }
 
-        public Task<Order?> DeleteOrderAsync(int id)
+        public async Task<Order?> DeleteOrderAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.DeleteOrderAsync(id);
         }
 
-        public Task<Product?> DeleteProductAsync(int id)
+        public async Task<Product?> DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.DeleteProductAsync(id);
         }
 
-        public Task<Product?> EditProductAsync(EditProductDto editProductDto)
+        public async Task<Product?> EditProductAsync(int id, EditProductDto dto)
         {
-            throw new NotImplementedException();
+            
+            var product = await _repository.GetProductByIdAsync(id);
+            if (product is null) return null;
+
+            var updated = product.EditProducFromDto(dto); 
+
+            return await _repository.EditProductAsync(updated);
         }
 
-        public Task<Notification?> GetNotificationById(int id)
+        public async Task<Notification?> GetNotificationById(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetNotificationById(id);
         }
 
-        public Task<Order?> GetOrderByIdAsync(int id)
+        public async Task<Order?> GetOrderByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetOrderByIdAsync(id);
         }
 
-        public Task<List<Order>?> GetOrdersAsync()
+        public async Task<List<Order>?> GetOrdersAsync()
         {
-            throw new NotImplementedException();
+            return await _repository.GetOrdersAsync();
         }
 
-        public Task<Product?> GetProductByIdAsync(int id)
+        public async Task<Product?> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetProductByIdAsync(id);
         }
 
-        public Task<Order?> UpdateOrderStatusAsync(int id, OrderStatus orderStatus)
+        public async Task<Order?> UpdateOrderStatusAsync(int id, OrderStatus orderStatus)
         {
-            throw new NotImplementedException();
+            return await _repository.UpdateOrderStatusAsync(id, orderStatus);
         }
     }
 }

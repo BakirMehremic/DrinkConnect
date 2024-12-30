@@ -13,10 +13,8 @@ namespace DrinkConnect.Dtos
         
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required]
         public string? UserId { get; set; } 
 
-        [Required]
         public ICollection<OrderProduct>? OrderProducts {get; set;}
     }
 }

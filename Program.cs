@@ -1,8 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DrinkConnect.Data;
+using DrinkConnect.Interfaces.RepositoryInterfaces;
 using DrinkConnect.Interfaces.ServiceInterfaces;
 using DrinkConnect.Models;
+using DrinkConnect.Repositories;
 using DrinkConnect.Services;
 using DrinkConnect.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +70,16 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IBartenderService, BartenderService>();
+builder.Services.AddScoped<IBartenderRepository, BartenderRepository>();
+builder.Services.AddScoped<IWaiterRepsoritoy, WaiterRepository>();
+builder.Services.AddScoped<IWaiterService, WaiterService>();
+
+// injected because UserUtils.GetCurrentUserId() cant be static 
+builder.Services.AddScoped<UserUtils>();
+
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

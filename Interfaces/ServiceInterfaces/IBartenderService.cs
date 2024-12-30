@@ -24,7 +24,7 @@ namespace DrinkConnect.Interfaces.ServiceInterfaces
 
         Task<Product> AddProductAsync(NewProductDto newProductDto);
 
-        Task<Product?> EditProductAsync(EditProductDto editProductDto);
+        Task<Product?> EditProductAsync(int id, EditProductDto editProductDto);
 
         Task<Product?> GetProductByIdAsync(int id);
 
