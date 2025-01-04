@@ -63,10 +63,10 @@ namespace DrinkConnect.Repositories
             return product;
         }
 
-        public async Task<Product?> EditProductAsync(Product product)
+        public async Task<Product?> EditProductAsync(int id, Product product)
         {
             var toEdit = await _context.Products
-            .FirstOrDefaultAsync(x => x.Id == product.Id);
+            .FirstOrDefaultAsync(x => x.Id == id);
 
             if (toEdit is null) return null;
 

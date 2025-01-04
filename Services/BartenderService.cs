@@ -50,7 +50,7 @@ namespace DrinkConnect.Services
 
             var updated = product.EditProducFromDto(dto); 
 
-            return await _repository.EditProductAsync(updated);
+            return await _repository.EditProductAsync(id, updated);
         }
 
         public async Task<Notification?> GetNotificationById(int id)

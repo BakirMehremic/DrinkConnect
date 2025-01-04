@@ -78,6 +78,9 @@ builder.Services.AddScoped<IWaiterService, WaiterService>();
 // injected because UserUtils.GetCurrentUserId() cant be static 
 builder.Services.AddScoped<UserUtils>();
 
+// same reason as UserUtils
+builder.Services.AddScoped<TokenUtils>();
+
 
 builder.Services.AddHttpContextAccessor();
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DrinkConnect.Interfaces.ServiceInterfaces;
 using DrinkConnect.Models;
+using DrinkConnect.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,16 +17,19 @@ namespace DrinkConnect.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+
         private readonly SymmetricSecurityKey _key;
 
         private readonly UserManager<User> _userManager;
 
-        // config is from appsettings.json
+        private readonly TokenUtils _tokenUtils;
 
-        public TokenService(IConfiguration configuration, UserManager<User> userManager)
+        public TokenService(IConfiguration configuration, UserManager<User> userManager,
+        TokenUtils tokenUtils)
         {
             _configuration = configuration;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]));
+            _tokenUtils = tokenUtils;
+            _key = _tokenUtils.InitializeKey();
             _userManager = userManager; 
         }
 

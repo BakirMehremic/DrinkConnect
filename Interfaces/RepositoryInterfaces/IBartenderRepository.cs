@@ -23,7 +23,7 @@ namespace DrinkConnect.Interfaces.RepositoryInterfaces
 
         Task<Product> AddProductAsync(Product product);
 
-        Task<Product?> EditProductAsync(Product product);
+        Task<Product?> EditProductAsync(int id, Product product);
 
         Task<Product?> GetProductByIdAsync(int id);
 

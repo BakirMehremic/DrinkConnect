@@ -44,28 +44,31 @@ namespace DrinkConnect.Services
 
         public async Task<Order?> EditOrderAsync(int id, EditOrderDto editOrderDto)
         {
-            //var product = _repository.Product.
-            return null;
+            var order = await _repository.GetOrderByIdAsync(id);
+            if(order is null) return null;
+
+            var edited = order.EditOrderDtoToOrder(editOrderDto);
+            return await _repository.EditOrderAsync(id, edited);
         }
 
-        public Task<Notification?> GetNotificationById(int id)
+        public async Task<Notification?> GetNotificationById(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetNotificationById(id);
         }
 
-        public Task<List<Notification>?> GetNotificationsAsync()
+        public async Task<List<Notification>?> GetNotificationsAsync()
         {
-            throw new NotImplementedException();
+            return await _repository.GetNotificationsAsync();
         }
 
-        public Task<Order?> GetOrderByIdAsync(int id)
+        public async Task<Order?> GetOrderByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetOrderByIdAsync(id);
         }
 
-        public Task<List<Order>?> GetOrdersAsync()
+        public async Task<List<Order>?> GetOrdersAsync()
         {
-            throw new NotImplementedException();
+            return await _repository.GetOrdersAsync();
         }
     }
 }
