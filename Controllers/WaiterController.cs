@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DrinkConnect.Dtos;
+using DrinkConnect.Exceptions;
 using DrinkConnect.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DrinkConnect.Controllers
 {   
     [Authorize(Policy = "WaiterOnly")]
-    [Route("bartender")]
+    [Route("waiter")]
     [ApiController]
     public class WaiterController : ControllerBase
     {
@@ -32,9 +33,9 @@ namespace DrinkConnect.Controllers
                 var order = await _service.AddOrderAsync(newOrderDto);
                 return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
             }
-            catch (Exception ex)
+            catch (ProductNotAvaliableException e)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -55,11 +56,19 @@ namespace DrinkConnect.Controllers
             if (editOrderDto == null)
                 return BadRequest("Invalid order data.");
 
-            var updatedOrder = await _service.EditOrderAsync(id, editOrderDto);
-            if (updatedOrder == null)
-                return NotFound($"Order with ID {id} not found.");
+            try{    
+                var updatedOrder = await _service.EditOrderAsync(id, editOrderDto);
+                    
+                if (updatedOrder == null)
+                    return NotFound($"Order with ID {id} not found.");
+                    
+                return Ok(updatedOrder);
+            }
+            
+            catch(ProductNotAvaliableException e){
+                return BadRequest(e.Message);
+            }
 
-            return Ok(updatedOrder);
         }
 
         [HttpGet("order/{id}")]

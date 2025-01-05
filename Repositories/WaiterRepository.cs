@@ -56,7 +56,7 @@ namespace DrinkConnect.Repositories
             FirstOrDefaultAsync(x => x.Id == id);
 
             if(oldOrder is null) return null;
-
+            oldOrder.OrderProducts = order.OrderProducts;
             oldOrder.Status = order.Status;
             oldOrder.TotalPrice = order.TotalPrice;
             oldOrder.UpdatedAt = DateTime.UtcNow;
@@ -72,17 +72,24 @@ namespace DrinkConnect.Repositories
 
         public async Task<Order?> GetOrderByIdAsync(int id)
         {
-            return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
+            // include makes sure that list of related orderproducts is returned 
+            return await _context.Orders.Include(o => o.OrderProducts)
+            .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Order>?> GetOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.Include(o => o.OrderProducts)
+            .ToListAsync();
         }
 
         public async Task<List<Notification>?> GetNotificationsAsync(){
             return await _context.Notifications.ToListAsync();
         }
 
+        public async Task<Product?> GetProductByIdAsync(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DrinkConnect.Controllers
 {
-    [Route("admin")]
+    [Route("auth")]
     [ApiController]
     public class AdminController : ControllerBase
     {

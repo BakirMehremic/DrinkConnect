@@ -24,6 +24,6 @@ namespace DrinkConnect.Interfaces.RepositoryInterfaces
         Task<Notification?> GetNotificationById(int id);
 
         Task<Notification?> DeleteNotificationAsync(int id);
-
+        Task<Product> GetProductByIdAsync(int id);
     }
 }

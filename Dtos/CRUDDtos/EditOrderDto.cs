@@ -9,12 +9,8 @@ namespace DrinkConnect.Dtos
 {
     public class EditOrderDto
     {
-        public float? TotalPrice { get; set; }
         
-        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
-
-        public string? UserId { get; set; } 
-
-        public ICollection<OrderProduct>? OrderProducts {get; set;}
+        [Required]
+        public required ICollection<EditOrderProductDto> OrderProducts {get; set;}
     }
 }

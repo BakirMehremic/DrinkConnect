@@ -26,6 +26,8 @@ namespace DrinkConnect.Interfaces.ServiceInterfaces
 
         Task<Notification?> DeleteNotificationAsync(int id);
 
+        Task<Product?> GetProductByIdAsync(int id);
+
          
     }
 }

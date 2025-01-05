@@ -15,7 +15,7 @@ namespace DrinkConnect.Models
 
 
         [ForeignKey("OrderId")]
-        public required Order Order { get; set; }
+        public Order? Order { get; set; }
 
 
         [ForeignKey("ProductId")]

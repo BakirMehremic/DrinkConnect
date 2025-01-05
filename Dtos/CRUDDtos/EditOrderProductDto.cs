@@ -9,9 +9,6 @@ namespace DrinkConnect.Dtos
     public class EditOrderProductDto
     {
         [Required]
-        public int OrderId { get; set; }
-
-        [Required]
         public int ProductId { get; set; }
 
         [Required]

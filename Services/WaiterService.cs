@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DrinkConnect.Dtos;
+using DrinkConnect.Exceptions;
 using DrinkConnect.Interfaces.RepositoryInterfaces;
 using DrinkConnect.Interfaces.ServiceInterfaces;
 using DrinkConnect.Mappers;
@@ -27,8 +28,12 @@ namespace DrinkConnect.Services
             if(userId is null)
                 throw new Exception("Current user Id can not be found");
             
-            var newOrder = OrderMapper.NewOrderDtoToOrder(newOrderDto, userId);
+            var newOrder = await OrderMapper.NewOrderDtoToOrderAsync(newOrderDto, userId, this);
 
+            if (newOrder.CheckProductsAvaliability() == false)
+                throw new ProductNotAvaliableException("Not enough products avaliable");
+
+            newOrder.DecreaseProductsQuantity();
             return await _repository.AddOrderAsync(newOrder);
         }
 
@@ -47,7 +52,13 @@ namespace DrinkConnect.Services
             var order = await _repository.GetOrderByIdAsync(id);
             if(order is null) return null;
 
-            var edited = order.EditOrderDtoToOrder(editOrderDto);
+            var edited = await order.EditOrderDtoToOrderAsync(editOrderDto, this);
+
+            if (edited.CheckProductsAvaliability() == false)
+                throw new ProductNotAvaliableException("Not enough products avaliable");
+
+            
+
             return await _repository.EditOrderAsync(id, edited);
         }
 
@@ -69,6 +80,10 @@ namespace DrinkConnect.Services
         public async Task<List<Order>?> GetOrdersAsync()
         {
             return await _repository.GetOrdersAsync();
+        }
+
+        public async Task<Product?> GetProductByIdAsync(int id){
+            return await _repository.GetProductByIdAsync(id);
         }
     }
 }

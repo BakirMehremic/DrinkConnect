@@ -17,13 +17,13 @@ namespace DrinkConnect.Models
         public float? TotalPrice { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; } 
 
         public string? UserId { get; set; } 
 
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
-        public ICollection<OrderProduct>? OrderProducts { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     }
 }

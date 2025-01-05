@@ -34,7 +34,7 @@ namespace DrinkConnect.Services
         }
 
         public string CreateToken(User user){
-
+            if (user.Id == null) throw new ArgumentNullException(nameof(user.Id), "User ID is required.");
             if (user.Email == null) throw new ArgumentNullException(nameof(user.Email), "User email is required.");
             if (user.UserName == null) throw new ArgumentNullException(nameof(user.UserName), "User username is required.");
             
@@ -43,7 +43,8 @@ namespace DrinkConnect.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
+                new Claim(JwtRegisteredClaimNames.GivenName, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             foreach (var role in roles)
@@ -55,6 +56,7 @@ namespace DrinkConnect.Services
 
             var tokenDesc = new SecurityTokenDescriptor
             {
+            
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddMinutes(30),
                 SigningCredentials = creds,
