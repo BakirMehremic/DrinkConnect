@@ -6,5 +6,6 @@ Microsoft.extensions.entity.core
 Microsoft.aspnetcore.identity.entityframeworkcore
 Microsoft.aspnetcore.authentication.jwtbearer
 Microsoft.AspNetCore.Identity.EntityFrameworkCore
+Microsoft.AspNetCore.SignalR.Core
 
 connection string in appsetings.json

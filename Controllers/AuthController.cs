@@ -62,17 +62,17 @@ namespace DrinkConnect.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, roleResult.Errors);
+                        return BadRequest(roleResult.Errors);
                     }
                 }
                 else
                 {
-                    return StatusCode(500, newUser.Errors);
+                    return BadRequest(newUser.Errors);
                 }
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message); 
+                return StatusCode(503, $"There was an error in processing the request {e}"); 
             }
         }
 

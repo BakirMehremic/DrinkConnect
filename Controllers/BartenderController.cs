@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DrinkConnect.Dtos;
 using DrinkConnect.Enums;
 using DrinkConnect.Interfaces.ServiceInterfaces;
+using DrinkConnect.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,12 @@ namespace DrinkConnect.Controllers
     public class BartenderController : ControllerBase
     {
         private readonly IBartenderService _service;
+        private readonly IWebsocketService _webSocketService;
 
-        public BartenderController(IBartenderService service)
+        public BartenderController(IBartenderService service, IWebsocketService webSocketService)
         {
             _service = service;
+            _webSocketService = webSocketService;
         }
 
 
@@ -66,12 +69,16 @@ namespace DrinkConnect.Controllers
             return Ok(product);
         }
 
-        [HttpPut("order/{id}/status")]
+        [HttpPut("order/{id}/status")] 
         public async Task<IActionResult> UpdateOrderStatus(int id, [FromQuery] OrderStatus orderStatus)
         {
             var updatedOrder = await _service.UpdateOrderStatusAsync(id, orderStatus);
             if (updatedOrder == null)
                 return NotFound($"Order with ID {id} not found.");
+
+            string message = $"Order with id {id} was updated to {updatedOrder.Status}";
+
+            await _webSocketService.NotifyWaiterAsync(updatedOrder.UserId, updatedOrder.Id, message);
 
             return Ok(updatedOrder);
         }
