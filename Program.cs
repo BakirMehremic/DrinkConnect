@@ -83,17 +83,15 @@ builder.Services.AddScoped<IBartenderService, BartenderService>();
 builder.Services.AddScoped<IBartenderRepository, BartenderRepository>();
 builder.Services.AddScoped<IWaiterRepsoritoy, WaiterRepository>();
 builder.Services.AddScoped<IWaiterService, WaiterService>();
-//builder.Services.AddScoped<IWebsocketService, WebSocketService>();
-//builder.Services.AddScoped<IWebSocketRepository, WebSocketRepository>();
+builder.Services.AddScoped<IWebSocketService, WebSocketService>();
 
-builder.Services.AddScoped<WebSocketHandler>();
+builder.Services.AddSingleton<WebSocketHandler>();
 
 // injected because UserUtils.GetCurrentUserId() cant be static 
 builder.Services.AddScoped<UserUtils>();
 
 // same reason as UserUtils
 builder.Services.AddScoped<TokenUtils>();
-
 
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
@@ -171,73 +169,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Enable WebSocket middleware
+// enabling websockets
 app.UseWebSockets(new WebSocketOptions
 {
-    KeepAliveInterval = TimeSpan.FromSeconds(120) // Adjust as needed
+    KeepAliveInterval = TimeSpan.FromSeconds(120) 
 });
 
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/notifications" && context.WebSockets.IsWebSocketRequest)
-    {
-        // Extract the token from the query string
-        var token = context.Request.Query["access_token"].ToString();
-
-        if (string.IsNullOrEmpty(token))
-        {
-            context.Response.StatusCode = 401; // Unauthorized
-            await context.Response.WriteAsync("Missing or invalid access token");
-            return;
-        }
-
-        // Validate the token
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]); // Replace with your signing key
-        try
-        {
-            var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = true,
-                ValidIssuer = builder.Configuration["JWT:Issuer"],
-                ValidateAudience = true,
-                ValidAudience = builder.Configuration["JWT:Audience"],
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            }, out _);
-
-            // Set the user in the HttpContext
-            context.User = claimsPrincipal;
-
-            // Get the user ID
-            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                context.Response.StatusCode = 403; // Forbidden
-                await context.Response.WriteAsync("User ID not found in token");
-                return;
-            }
-
-            // Accept the WebSocket connection
-            var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
-            // Pass the user ID to your WebSocketHandler
-            var webSocketHandler = context.RequestServices.GetRequiredService<DrinkConnect.Utils.WebSocketHandler>();
-            await webSocketHandler.HandleWebSocketAsync(webSocket, userId);
-        }
-        catch (Exception ex)
-        {
-            context.Response.StatusCode = 401; // Unauthorized
-            await context.Response.WriteAsync($"Invalid token: {ex.Message}");
-        }
-    }
-    else
-    {
-        await next();
-    }
-});
+// used for authentification of websocket requests
+app.UseMiddleware<DrinkConnect.Middleware.WebSocketMiddleware>();
 
 
 app.Run();

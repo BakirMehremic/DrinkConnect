@@ -17,9 +17,9 @@ namespace DrinkConnect.Controllers
     public class BartenderController : ControllerBase
     {
         private readonly IBartenderService _service;
-        private readonly IWebsocketService _webSocketService;
+        private readonly IWebSocketService _webSocketService;
 
-        public BartenderController(IBartenderService service, IWebsocketService webSocketService)
+        public BartenderController(IBartenderService service, IWebSocketService webSocketService)
         {
             _service = service;
             _webSocketService = webSocketService;
@@ -78,7 +78,7 @@ namespace DrinkConnect.Controllers
 
             string message = $"Order with id {id} was updated to {updatedOrder.Status}";
 
-            await _webSocketService.NotifyWaiterAsync(updatedOrder.UserId, updatedOrder.Id, message);
+            await _webSocketService.SendNotificationAsync(updatedOrder, message);
 
             return Ok(updatedOrder);
         }

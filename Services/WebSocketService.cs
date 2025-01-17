@@ -1,43 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using DrinkConnect.Dtos.CRUDDtos;
-using DrinkConnect.Interfaces.RepositoryInterfaces;
 using DrinkConnect.Interfaces.ServiceInterfaces;
-using DrinkConnect.Mappers;
 using DrinkConnect.Models;
 using DrinkConnect.Utils;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
 
 namespace DrinkConnect.Services
-{   
-    [Authorize(Policy = "WaiterOnly")]
-    public class WebSocketService : IWebsocketService
+{
+    public class WebSocketService : IWebSocketService
     {
-        private readonly IWebSocketRepository _webSocketRepository;
-        public WebSocketService(
-            IWebSocketRepository webSocketRepository)
+        private readonly WebSocketHandler _webSocketHandler;
+
+        public WebSocketService(WebSocketHandler webSocketHandler)
         {
-            _webSocketRepository = webSocketRepository;
+            _webSocketHandler = webSocketHandler;
         }
 
-        public async Task NotifyWaiterAsync(string UserId, int OrderId,
-            string Message){
-
-            var notification = new Notification{
-                UserId = UserId,
-                OrderId = OrderId,
-                Text = $"Order with id: {OrderId} was updated" + Message
+        public async Task SendNotificationAsync(Order order, string message)
+        {
+            var newNotification = new NewNotificationDto{
+                UserId = order.UserId,
+                OrderId = order.Id,
+                Text = message
             };
-
-            /*await _webSocketHub.Clients.Group(UserId).SendAsync("ReceiveNotification", new
-            {
-                Notification = notification
-            });*/
+            await _webSocketHandler.SendNotificationAsync(order.UserId, newNotification);
         }
+        
     }
 }

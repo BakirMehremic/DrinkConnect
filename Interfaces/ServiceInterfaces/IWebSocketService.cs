@@ -7,8 +7,8 @@ using DrinkConnect.Models;
 
 namespace DrinkConnect.Interfaces.ServiceInterfaces
 {
-    public interface IWebsocketService
+    public interface IWebSocketService
     {
-        Task NotifyWaiterAsync(string UserId, int OrderId, string Message);
+        Task SendNotificationAsync(Order order, string message);
     }
 }
