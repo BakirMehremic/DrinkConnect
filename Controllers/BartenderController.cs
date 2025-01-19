@@ -110,6 +110,9 @@ namespace DrinkConnect.Controllers
             if (order == null)
                 return NotFound($"Order with ID {id} not found.");
 
+            string message = $"Order with id {id} was deleted";
+            await _webSocketService.SendNotificationAsync(order, message);
+
             return Ok(order);
         }
 

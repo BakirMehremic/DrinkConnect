@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DrinkConnect.Dtos.CRUDDtos
 {
-    public class NewNotificationDto // orderid userid text?
+    public class NewNotificationDto 
     {
         [Required]
         public required int OrderId {get; set;}

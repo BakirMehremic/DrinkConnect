@@ -45,6 +45,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme =
@@ -85,6 +86,7 @@ builder.Services.AddScoped<IWaiterRepsoritoy, WaiterRepository>();
 builder.Services.AddScoped<IWaiterService, WaiterService>();
 builder.Services.AddScoped<IWebSocketService, WebSocketService>();
 
+// singleton because one instance is needed to keep a dictionary of connected sockets
 builder.Services.AddSingleton<WebSocketHandler>();
 
 // injected because UserUtils.GetCurrentUserId() cant be static 
