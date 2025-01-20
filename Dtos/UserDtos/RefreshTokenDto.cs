@@ -9,6 +9,6 @@ namespace DrinkConnect.Dtos.UserDtos
     public class RefreshTokenDto
     {
         [Required]
-        public string RefreshToken { get; set; }
+        public string? RefreshToken { get; set; }
     }
 }

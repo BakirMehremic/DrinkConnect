@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Iana;
 
 namespace DrinkConnect.Controllers
 {
@@ -50,15 +51,9 @@ namespace DrinkConnect.Controllers
 
                     if (roleResult.Succeeded)
                     {
-                        return Ok(
-                            new RegisterResponseDto
-                            {
-                                Username = user.UserName,
-                                Email = user.Email,
-                                Role = dto.Role,
-                                Token = _tokenService.CreateToken(user) 
-                            }
-                        );
+                        var code = await _adminManager.GenerateEmailConfirmationTokenAsync(user);
+
+                        return Ok($"Please confirm with code {code}");
                     }
                     else
                     {
@@ -76,6 +71,32 @@ namespace DrinkConnect.Controllers
             }
         }
 
+        [HttpPost("/confirmemail")]
+        public async Task<IActionResult> ConfirmEmail(string? email, string? code){
+            if(email is null || code is null)
+                return BadRequest("Email or code can not be null");
+
+            var user = await _adminManager.FindByEmailAsync(email);
+
+            if(user is null)
+                return BadRequest("Wrong email");
+
+            var IsValid = await _adminManager.ConfirmEmailAsync(user, code);
+
+            if(IsValid.Succeeded){
+                return Ok(
+                            new RegisterResponseDto
+                            {
+                                Username = user.UserName,
+                                Email = user.Email,
+                                Token = _tokenService.CreateToken(user) 
+                            }
+                        );
+            }
+
+            return BadRequest("Wrong data entered");
+        }
+
 
         [HttpPost("/login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
@@ -83,11 +104,16 @@ namespace DrinkConnect.Controllers
             var user = await _adminManager.Users.FirstOrDefaultAsync
             (x => x.UserName == dto.Username.ToLower());
 
-            if (user == null) return Unauthorized("Invalid username!");
+            if (user == null) 
+                return Unauthorized("Invalid username!");
 
             var result = await _signinManager.CheckPasswordSignInAsync(user, dto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized("Username not found and/or password incorrect");
+            if (!result.Succeeded) 
+                return Unauthorized("Username not found and/or password incorrect");
+
+            if(!user.EmailConfirmed)
+                return Unauthorized("Email not confirmed");
 
             var refreshToken = _tokenService.CreateRefreshToken();
             user.RefreshToken = refreshToken;

@@ -8,9 +8,8 @@ namespace DrinkConnect.Dtos.UserDtos
 {
     public class RegisterResponseDto
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public UserRole Role { get; set; }
-        public string Token { get; set; }
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public string? Token { get; set; }
     }
 }
