@@ -90,6 +90,9 @@ builder.Services.AddScoped<IWaiterRepsoritoy, WaiterRepository>();
 builder.Services.AddScoped<IWaiterService, WaiterService>();
 builder.Services.AddScoped<IWebSocketService, WebSocketService>();
 
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Mailtrap"));
+builder.Services.AddTransient<EmailService>();
+
 // singleton because one instance is needed to keep a dictionary of connected sockets
 builder.Services.AddSingleton<WebSocketHandler>();
 
@@ -98,6 +101,7 @@ builder.Services.AddScoped<UserUtils>();
 
 // same reason as UserUtils
 builder.Services.AddScoped<TokenUtils>();
+
 
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();

@@ -2,6 +2,7 @@
 using DrinkConnect.Dtos.UserDtos;
 using DrinkConnect.Interfaces.ServiceInterfaces;
 using DrinkConnect.Models;
+using DrinkConnect.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace DrinkConnect.Controllers
         private readonly UserManager<User> _adminManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<User> _signinManager;
+        private readonly EmailService _emailService;
 
         public AdminController(UserManager<User> AdminManager, ITokenService tokenService,
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager, EmailService emailService)
         {
             _tokenService = tokenService;
             _adminManager = AdminManager;
             _signinManager = signInManager;
+            _emailService = emailService;
         }
         
 
@@ -52,8 +55,15 @@ namespace DrinkConnect.Controllers
                     if (roleResult.Succeeded)
                     {
                         var code = await _adminManager.GenerateEmailConfirmationTokenAsync(user);
+                        var sent = await _emailService.SendEmailAsync(dto.Email,
+                                    "Email Confirmation",
+                                    $"Your confirmation code is: {code}"
+                                    );
 
-                        return Ok($"Please confirm with code {code}");
+                        if(sent == true)
+                            return Ok("Confirmation Email sent.");
+
+                        return StatusCode(503, "Unable to send confirmation email.");
                     }
                     else
                     {

@@ -133,3 +133,4 @@ c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\Microsoft.Exten
 c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\Newtonsoft.Json.dll
+c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\RestSharp.dll
