@@ -147,6 +147,13 @@ builder.Services.AddSwaggerGen(option =>
 
 var app = builder.Build();
 
+// Apply migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();  
+}
+
 // Seed roles and users during startup
 using (var scope = app.Services.CreateScope())
 {

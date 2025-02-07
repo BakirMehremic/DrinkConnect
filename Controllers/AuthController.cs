@@ -55,13 +55,20 @@ namespace DrinkConnect.Controllers
                     if (roleResult.Succeeded)
                     {
                         var code = await _adminManager.GenerateEmailConfirmationTokenAsync(user);
-                        var sent = await _emailService.SendEmailAsync(dto.Email,
+                        try{
+                            var sent = await _emailService.SendEmailAsync(dto.Email,
                                     "Email Confirmation",
                                     $"Your confirmation code is: {code}"
                                     );
 
                         if(sent == true)
                             return Ok("Confirmation Email sent.");
+                        }
+                        // this exists so you can test without having a mailtrap api key
+                        catch (Exception e){
+                            Ok($"Code is {code}, could not send email due to {e}");
+                        }
+                        
 
                         return StatusCode(503, "Unable to send confirmation email.");
                     }

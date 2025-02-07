@@ -1,4 +1,3 @@
-c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\appsettings.Development.json
 c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\appsettings.json
 c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\DrinkConnect.exe
 c:\Users\User\Desktop\DrinkConnect\DrinkConnect\bin\Debug\net8.0\BouncyCastle.Cryptography.dll

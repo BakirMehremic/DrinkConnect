@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mysql_db:
+    image: mysql:8.4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: passwordd
+      MYSQL_DATABASE: drinkconnect
+      MYSQL_USER: drinkconnect_user  
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  drinkconnect_app:
+    build:
+      context: .  
+      dockerfile: Dockerfile  
+    restart: always  
+    depends_on:
+      - mysql_db
+    ports:
+      - "5000:8080"
+    environment:
+      - AllowedHosts=*
+      - FMPKey=Insert key here
+      - JWT__Issuer=http://localhost:5246
+      - JWT__Audience=http://localhost:5246
+      - JWT__SigningKey=TESTKEY9e4a1d54f81cd4e69c2755fa908bb63da34642eb7cf94f48ed224e1992bc416a7a0dfe393f90a56748ecf8b646a05fc0dfd53fe5f8b3a55d3ebd8e405c1169d53a6cb2311a4af8f9d8a74552114eee0d178bf682013bdf9c77cbb059aa188d9ca8524addfacc6a3b97f8b579375a7de86470b7dff7c28a6ee99a84fb7940b295
+      - Mailtrap__ApiKey=INSERTVALIDAPIKEY
+      - Mailtrap__FromEmail=hello@demomailtrap.com
+      - Mailtrap__FromName="Mailtrap Test"
+      - ConnectionStrings__DefaultConnection=server=mysql_db;database=drinkconnect;user=drinkconnect_user;password=password;
+      - ASPNETCORE_ENVIRONMENT=Development
+
+volumes:
+  mysql_data:
