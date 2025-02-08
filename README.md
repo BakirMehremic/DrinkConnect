@@ -11,13 +11,14 @@ It has features like real email code confirmation, websockets, calculating order
 
 ## Run Locally 
 
-Docker compose has neeeded env variables so you can run it.
+Docker compose has neeeded env variables so you can run it. Configured to run on port 5000 and MySQL on 3307.
 
 **Run following commands**   
    ```bash
    git clone https://github.com/BakirMehremic/DrinkConnect
    cd DrinkConnect
    docker compose up --build
+   http://localhost:5000/swagger/index.html
 ```
 
 ## Endpoints
