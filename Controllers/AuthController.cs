@@ -66,10 +66,9 @@ namespace DrinkConnect.Controllers
                         }
                         // this exists so you can test without having a mailtrap api key
                         catch (Exception e){
-                            Ok($"Code is {code}, could not send email due to {e}");
+                            return Ok($"Code is {code}, could not send email due to {e}");
                         }
-                        
-
+                    
                         return StatusCode(503, "Unable to send confirmation email.");
                     }
                     else
