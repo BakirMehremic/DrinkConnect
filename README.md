@@ -18,7 +18,7 @@ Docker compose has neeeded env variables so you can run it.
    git clone https://github.com/BakirMehremic/DrinkConnect
    cd DrinkConnect
    docker compose up --build
-
+```
 
 ## Endpoints
 
